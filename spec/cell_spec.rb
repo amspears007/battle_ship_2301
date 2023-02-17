@@ -3,30 +3,26 @@ require 'spec_helper'
 RSpec.describe Cell do 
 
 let(:cell) {Cell.new("B4")}
+let(:cell_2) {Cell.new("C3")}
+let(:cruiser) {Ship.new("Cruiser", 3)}
 
   it 'can initialize' do
-
     expect(cell).to be_instance_of(Cell)
     expect(cell.coordinate).to eq("B4")
   end
 
   it 'ship starts nil, cell is empty' do
-
     expect(cell.ship).to eq(nil)
     expect(cell.empty?).to eq(true)
   end
 
   it 'adds a ship the cell' do
-    cruiser = Ship.new("Cruiser", 3)
-
     cell.place_ship(cruiser)
     expect(cell.empty?).to eq(false)
     expect(cell.ship).to eq(cruiser)
   end
 
   it 'can be fired upon if ship is placed' do
-    cruiser = Ship.new("Cruiser", 3)
-
     cell.place_ship(cruiser)
     expect(cell.fired_upon?).to eq(false)
 
@@ -48,13 +44,8 @@ let(:cell) {Cell.new("B4")}
   end
 
   it 'can render repressentation of cell with ship' do
-    cell_2 = Cell.new("C3")
-    cruiser = Ship.new("Cruiser", 3)
-
     cell_2.place_ship(cruiser)
     expect(cell_2.render).to eq('.')
-
-    # cell_2.render(true)
     expect(cell_2.render(true)).to eq("S")
 
     cell_2.fire_upon
