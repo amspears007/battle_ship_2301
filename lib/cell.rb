@@ -31,4 +31,11 @@ class Cell
       @ship.hit
     end
   end
+
+  def render
+    return "." if @impact == false
+      return "M" if @impact == true && @empty == true
+        return "X" if @impact == true && @ship.health == 0
+          return "H" if @impact == true && @empty == false
+  end
 end
