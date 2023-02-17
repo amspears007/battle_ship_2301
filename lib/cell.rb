@@ -31,4 +31,8 @@ class Cell
       @ship.hit
     end
   end
+
+  def render
+    return "." if @impact == false
+  end
 end
