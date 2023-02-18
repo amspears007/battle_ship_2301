@@ -33,7 +33,7 @@ class Board
     end && 
       consecutive_order?(coordinates) && 
       coordinates.all? do |coordinate|
-      @cells[coordinate].empty == true
+      @cells[coordinate].empty? == true
     end
   end
 
@@ -43,5 +43,12 @@ class Board
       cell_2[-1].to_i - 1 == cell_1[-1].to_i || cell_1[-1] == cell_2[-1] && 
       cell_2[0].ord - 1 == cell_1[0].ord
     end  
+  end
+
+  def place(ship, coordinates)
+    return false if !valid_placement?(ship, coordinates)
+    coordinates.each do |coordinate|
+      @cells[coordinate].place_ship(ship)
+    end
   end
 end
