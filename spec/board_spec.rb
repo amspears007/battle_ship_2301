@@ -29,6 +29,11 @@ RSpec.describe Board do
     submarine = Ship.new("Submarine", 2)
 
     expect(board.valid_placement?(cruiser, ["A1", "A2"])).to eq(false)
-    expect(board.valid_placement?(submarine, ["A2", "A3", "A"])).to eq(false)
+    expect(board.valid_placement?(submarine, ["A2", "A3", "A4"])).to eq(false)
   end
+
+  #Iterate over board.cells.keys with each_cons passing in the coordinates from 
+  #test.  WE want to check whether that specific coordinate 
+  #Create orindal values of all 16 coordinates
+
 end

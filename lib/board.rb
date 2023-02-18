@@ -28,5 +28,6 @@ class Board
 
   def valid_placement?(ship, coordinates)
     ship.length == coordinates
+    require 'pry'; binding.pry
   end
 end
