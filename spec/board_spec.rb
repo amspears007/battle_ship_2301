@@ -22,4 +22,13 @@ RSpec.describe Board do
     expect(board.valid_coordinate?("E1")).to eq(false)
     expect(board.valid_coordinate?("A22")).to eq(false)
   end
+
+  it 'validates placements of ships on the board' do
+    board = Board.new
+    cruiser = Ship.new("Cruiser", 3)
+    submarine = Ship.new("Submarine", 2)
+
+    expect(board.valid_placement?(cruiser, ["A1", "A2"])).to eq(false)
+    expect(board.valid_placement?(submarine, ["A2", "A3", "A"])).to eq(false)
+  end
 end
