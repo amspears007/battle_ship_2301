@@ -27,7 +27,18 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    ship.length == coordinates
-    require 'pry'; binding.pry
+    ship.length == coordinates.length && 
+    coordinates.all? do |coordinate|
+      valid_coordinate?(coordinate)
+    end 
+      && consecutive_order?(coordinates) &&     coordinates.all? do |coordinate|
+      @cells[coordinate].empty == true
+    end
+  end
+
+  def consecutive_order?(coordinates)
+    coordinates.each_cons(2).all? do |cell_1, cell_2|
+      cell_1[0] == cell_2[0] && cell_2[-1].to_i - 1 == cell_1[-1].to_i || cell_1[-1] == cell_2[-1] && cell_2[0].ord - 1 == cell_1[0].ord
+      end  
   end
 end
