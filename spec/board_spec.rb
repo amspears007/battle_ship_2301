@@ -34,11 +34,21 @@ RSpec.describe Board do
 
   it 'makes sure coordinates are consecutive on the board' do
     board = Board.new
+    cruiser = Ship.new("Cruiser", 3)
+    submarine = Ship.new("Submarine", 2)
 
     expect(board.consecutive_order?(["A1", "A2", "A4"])).to eq(false)
     expect(board.consecutive_order?(["A1", "C1"])).to eq(false)
     expect(board.consecutive_order?(["A3", "A2", "A1"])).to eq(false)
     expect(board.consecutive_order?(["C1", "B1"])).to eq(false)
+
+    expect(board.consecutive_order?(["B2", "B3", "B4"])).to eq(true)
+    expect(board.consecutive_order?(["C1", "C2"])).to eq(true)
+    expect(board.consecutive_order?(["C3", "D3"])).to eq(true)
+
+    expect(board.valid_placement?(cruiser, ["B2", "B3", "B4"])).to eq(true)
+    expect(board.valid_placement?(submarine, ["C1", "C2"])).to eq(true)
+    expect(board.valid_placement?(submarine, ["C3", "D3"])).to eq(true)
   end
 
   it 'makes sure coordinates are not diagonal on the board' do
@@ -55,6 +65,9 @@ RSpec.describe Board do
 
     expect(board.valid_placement?(submarine, ["A1", "A2"])).to eq(true)
     expect(board.valid_placement?(cruiser, ["B1", "C1", "D1"])).to eq(true)
+    expect(board.valid_placement?(submarine, ["E1", "E2"])).to eq(false)
+    expect(board.valid_placement?(cruiser, ["A2", "A3", "A4"])).to eq(true)
+    expect(board.valid_placement?(submarine, ["$$", "##"])).to eq(false)
   end
 
 end
