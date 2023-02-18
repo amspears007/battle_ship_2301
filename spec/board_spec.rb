@@ -32,8 +32,20 @@ RSpec.describe Board do
     expect(board.valid_placement?(submarine, ["A2", "A3", "A4"])).to eq(false)
   end
 
-  #Iterate over board.cells.keys with each_cons passing in the coordinates from 
-  #test.  WE want to check whether that specific coordinate 
-  #Create orindal values of all 16 coordinates
+  it 'makes sure coordinates are consecutive on the board' do
+    board = Board.new
+
+    expect(board.consecutive_order?(["A1", "A2", "A4"])).to eq(false)
+    expect(board.consecutive_order?(["A1", "C1"])).to eq(false)
+    expect(board.consecutive_order?(["A3", "A2", "A1"])).to eq(false)
+    expect(board.consecutive_order?(["C1", "B1"])).to eq(false)
+  end
+
+  it 'makes sure coordinates are not diagonal on the board' do
+    board = Board.new
+
+    expect(board.consecutive_order?(["A1", "B2", "C3"])).to eq(false)
+    expect(board.consecutive_order?(["C2", "D3"])).to eq(false)
+  end
 
 end
