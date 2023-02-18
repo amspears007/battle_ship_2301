@@ -42,6 +42,6 @@ class Board
       cell_1[0] == cell_2[0] && 
       cell_2[-1].to_i - 1 == cell_1[-1].to_i || cell_1[-1] == cell_2[-1] && 
       cell_2[0].ord - 1 == cell_1[0].ord
-      end  
+    end  
   end
 end
