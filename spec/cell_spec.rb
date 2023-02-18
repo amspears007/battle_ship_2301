@@ -43,7 +43,7 @@ let(:cruiser) {Ship.new("Cruiser", 3)}
     expect(cell.render).to eq('M')
   end
 
-  it 'can render repressentation of cell with ship' do
+  it 'can render representation of cell with ship' do
     cell_2.place_ship(cruiser)
     expect(cell_2.render).to eq('.')
     expect(cell_2.render(true)).to eq("S")
