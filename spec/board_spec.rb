@@ -117,9 +117,12 @@ RSpec.describe Board do
   it 'can render the board' do
     board = Board.new
     cruiser = Ship.new("Cruiser", 3)
+    submarine = Ship.new("Submarine", 2)
+
     board.place(cruiser, ["A1", "A2", "A3"])
     expect(board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
-    
-
+    expect(board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n")
+    board.place(submarine, ["C3", "D3"])
+    expect(board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . S . \nD . . S . \n")
   end
 end

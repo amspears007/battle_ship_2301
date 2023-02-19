@@ -56,20 +56,16 @@ class Board
   def render(visible = false)
     cell_values = @cells.values.flatten
     rendered_cells = []
+    if !visible
     cell_values.map do |cell_value|
       rendered_cells << cell_value.render
     end
-    # rendered_cells
-      # require 'pry'; binding.pry
       "  1 2 3 4 \nA #{rendered_cells[0, 4].join(' ')} \nB #{rendered_cells[4, 4].join(' ')} \nC #{rendered_cells[8, 4].join(' ')} \nD #{rendered_cells[12, 4].join(' ')} \n"
-    
-    # @cells.map do |cell|
-
-
-    #   starter_board = @cells.each_value.map {|cell| cell.render}
-    #   # @cells[cell].render
-    #   split_board = starter_board.each_slice(4).to_a
-    # rendered_board = "  1 2 3 4 \nA #{split_board[0].concat.join(" ")} \nB #{split_board[1].concat.join(" ")} \nC #{split_board[2].concat.join(" ")} \nD #{split_board[3].concat.join(" ")} \n"
-    #end
+    else
+      cell_values.map do |cell_value|
+        rendered_cells << cell_value.render(true)
+      end
+        "  1 2 3 4 \nA #{rendered_cells[0, 4].join(' ')} \nB #{rendered_cells[4, 4].join(' ')} \nC #{rendered_cells[8, 4].join(' ')} \nD #{rendered_cells[12, 4].join(' ')} \n"
+    end
   end
 end
