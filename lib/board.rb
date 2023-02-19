@@ -60,12 +60,20 @@ class Board
     cell_values.map do |cell_value|
       rendered_cells << cell_value.render
     end
-      "  1 2 3 4 \nA #{rendered_cells[0, 4].join(' ')} \nB #{rendered_cells[4, 4].join(' ')} \nC #{rendered_cells[8, 4].join(' ')} \nD #{rendered_cells[12, 4].join(' ')} \n"
+      "  1 2 3 4 \n" +
+      "A #{rendered_cells[0, 4].join(' ')} \n" +
+      "B #{rendered_cells[4, 4].join(' ')} \n" + 
+      "C #{rendered_cells[8, 4].join(' ')} \n" +
+      "D #{rendered_cells[12, 4].join(' ')} \n"
     else
       cell_values.map do |cell_value|
         rendered_cells << cell_value.render(true)
       end
-        "  1 2 3 4 \nA #{rendered_cells[0, 4].join(' ')} \nB #{rendered_cells[4, 4].join(' ')} \nC #{rendered_cells[8, 4].join(' ')} \nD #{rendered_cells[12, 4].join(' ')} \n"
+      "  1 2 3 4 \n" +
+      "A #{rendered_cells[0, 4].join(' ')} \n" +
+      "B #{rendered_cells[4, 4].join(' ')} \n" + 
+      "C #{rendered_cells[8, 4].join(' ')} \n" +
+      "D #{rendered_cells[12, 4].join(' ')} \n"
     end
   end
 end
