@@ -45,10 +45,8 @@ class Game
 
 		def comp_sub_placement
 			random_coord = @comp_board.cells.keys.sample(2)
-			# require 'pry'; binding.pry
 			until @comp_board.valid_placement?(@comp_sub, random_coord)
 				random_coord = @comp_board.cells.keys.sample(2)
-				# require 'pry'; binding.pry
 			end
 			@comp_board.place(@comp_sub, random_coord)
 		end

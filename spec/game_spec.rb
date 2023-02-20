@@ -19,11 +19,7 @@ RSpec.describe Game do
         board = Board.new
         comp_board = Board.new
         comp_sub = Ship.new('Submarine', 2)
-        # random_coord = board.cells.keys.sample(2)
-        # expect(random_coord).to be_instance_of(Array)
         game.comp_sub_placement
-        # require 'pry'; binding.pry
-        expect(comp_board.valid_placement?(comp_sub, ["A1", "A3"])).to eq(false)
-        expect(comp_board.valid_placement?(comp_sub, ["A1", "A2"])).to eq(true)
+        expect(game.comp_board.render(true) == game.comp_board.render).to be(false)
       end
 end
