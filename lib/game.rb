@@ -16,7 +16,8 @@ class Game
     end
 
     def main_menu
-      puts "Welcome to BATTLESHIP"
+      puts "Welcome to =*BATTLESHIP*="
+			puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
       puts "Enter P to play. Enter Q to quit."
       user_input = gets.chomp
       if user_input.upcase == "P"
@@ -32,11 +33,19 @@ class Game
     end
 
 		def start_game
-			@comp.comp_sub_placement(comp_board)
-			@comp.comp_cruiser_placement(comp_board)
+			comp_sub_placement
+			comp_cruiser_placement
+			puts "========================================="
 			puts "I have laid out my ships on the grid."
 			puts "You now need to lay out your two ships."
-			user_board.render
+			puts "========================================="
+			puts "Here is my board:"
+			print comp_board.render
+			puts "========================================="
+			puts "Place your ships on this board:"
+			puts "========================================="
+			print user_board.render
+
 			puts "Enter the squares for the Cruiser (3 spaces):"
 			user_input = gets.chomp.upcase
 			# if user_board
