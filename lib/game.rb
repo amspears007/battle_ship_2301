@@ -1,4 +1,4 @@
-class Setup
+class Game
   	attr_reader :user_board, 
 								:comp_board, 
 								:user_cruiser,
@@ -41,5 +41,15 @@ class Setup
 			puts "Enter the squares for the Cruiser (3 spaces):"
 			user_input = gets.chomp.upcase
 			# if user_board
+		end
+
+		def comp_sub_placement
+			random_coord = @comp_board.cells.keys.sample(2)
+			# require 'pry'; binding.pry
+			until @comp_board.valid_placement?(@comp_sub, random_coord)
+				random_coord = @comp_board.cells.keys.sample(2)
+				# require 'pry'; binding.pry
+			end
+			@comp_board.place(@comp_sub, random_coord)
 		end
 end
