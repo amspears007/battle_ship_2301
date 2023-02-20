@@ -1,18 +1,28 @@
 class Setup
-  	attr_reader :user_board, :comp_board
+  	attr_reader :user_board, 
+								:comp_board, 
+								:user_cruiser,
+								:user_sub,
+								:comp_cruiser,
+								:comp_sub
 
     def initialize
       @user_board = Board.new
       @comp_board = Board.new
+			@user_cruiser = Ship.new('Cruiser', 3)
+			@user_sub = Ship.new('Submarine', 2)
+			@comp_cruiser = Ship.new('Cruiser', 3)
+			@comp_sub = Ship.new('Submarine', 2)
+			@comp = Computer.new
     end
 
     def main_menu
-      puts "Welcome to BATTLESHIP
-      Enter P to play. Enter Q to quit."
+      puts "Welcome to BATTLESHIP"
+      puts "Enter P to play. Enter Q to quit."
       user_input = gets.chomp
-      if user_input == "P"
+      if user_input.upcase == "P"
         start_game
-      else user_input == "Q"
+      else user_input.upcase == "Q"
         quit_game
       end
     end
@@ -23,9 +33,13 @@ class Setup
     end
 
 		def start_game
-			puts "I have laid out my ships on the grid.
-			You now need to lay out your two ships.
-			The Cruiser is three units long and the Submarine is two units long."
-			
+			@comp.comp_sub_placement(comp_board)
+			@comp.comp_cruiser_placement(comp_board)
+			puts "I have laid out my ships on the grid."
+			puts "You now need to lay out your two ships."
+			user_board.render
+			puts "Enter the squares for the Cruiser (3 spaces):"
+			user_input = gets.chomp.upcase
+			# if user_board
 		end
 end
