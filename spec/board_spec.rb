@@ -113,4 +113,44 @@ RSpec.describe Board do
     expect(board.valid_placement?(submarine, ["A1", "B1"])).to eq(false)
     expect(board.place(submarine, ["A1", "B1"])).to eq(false)
   end
+
+  it 'can render the board' do
+    board = Board.new
+    cruiser = Ship.new("Cruiser", 3)
+    submarine = Ship.new("Submarine", 2)
+
+    board.place(cruiser, ["A1", "A2", "A3"])
+    expect(board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
+    expect(board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n")
+    board.place(submarine, ["C3", "D3"])
+    expect(board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . S . \nD . . S . \n")
+  end
+
+  it 'can render the board with ships fired_upon, hit and sunk' do
+    board = Board.new
+    cruiser = Ship.new("Cruiser", 3)
+    submarine = Ship.new("Submarine", 2)
+    cell_1 = board.cells["A1"]  
+    cell_2 = board.cells["A2"]
+    cell_3 = board.cells["A3"] 
+    cell_4 = board.cells["C3"]
+    cell_5 = board.cells["D3"]
+
+    board.place(cruiser, ["A1", "A2", "A3"])
+    board.place(submarine, ["C3", "D3"])
+
+    cell_1.fire_upon
+    expect(board.render).to eq("  1 2 3 4 \nA H . . . \nB . . . . \nC . . . . \nD . . . . \n")
+
+    cell_4.fire_upon
+    expect(board.render(true)).to eq("  1 2 3 4 \nA H S S . \nB . . . . \nC . . H . \nD . . S . \n")
+    cell_5.fire_upon
+    expect(board.render(true)).to eq("  1 2 3 4 \nA H S S . \nB . . . . \nC . . X . \nD . . X . \n")
+    
+    
+
+
+
+
+  end
 end
