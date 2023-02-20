@@ -13,7 +13,6 @@ class Game
 			@user_sub = Ship.new('Submarine', 2)
 			@comp_cruiser = Ship.new('Cruiser', 3)
 			@comp_sub = Ship.new('Submarine', 2)
-			@comp = Computer.new
     end
 
     def main_menu
@@ -49,5 +48,13 @@ class Game
 				random_coord = @comp_board.cells.keys.sample(2)
 			end
 			@comp_board.place(@comp_sub, random_coord)
+		end
+
+		def comp_cruiser_placement
+			random_coord = @comp_board.cells.keys.sample(3)
+			until @comp_board.valid_placement?(@comp_cruiser, random_coord)
+				random_coord = @comp_board.cells.keys.sample(3)
+			end
+			@comp_board.place(@comp_cruiser, random_coord)
 		end
 end
