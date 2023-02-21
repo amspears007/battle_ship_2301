@@ -82,18 +82,25 @@ class Game
 			puts "==============PLAYER BOARD=============="
 			print user_board.render(true)
 			puts "Enter the coordinate for your shot:" 
-			user_input = gets.chomp.upcase
-			print comp_board.render(true)
-			if user_input.fired_upon? == false && comp_board.valid_coordinate?(user_input)
-				user_input.fire_upon
+			until user_cruiser.sunk? && user_sub.sunk? || comp_cruiser.sunk? && comp_sub.sunk?
+				user_input = gets.chomp.upcase
+				until comp_board.valid_coordinate?(user_input)
+					puts "Please enter a valid coordinate" 
+					puts "(example: A1-D4):"
+					user_input = gets.chomp.upcase
+				end
+				puts "Enter the coordinate for your shot:" 
+				if comp_board.cells[user_input].fired_upon? == false 
+				comp_board.cells[user_input].fire_upon
+				puts "=============COMPUTER BOARD============="
 				print comp_board.render
+				end
+				random_coord = user_board.cells.keys.sample(1)[0]
+				user_board.cells[random_coord].fire_upon
+				puts "==============PLAYER BOARD=============="
 				print user_board.render(true)
+				end
 			end
-		end
-
-
-	
-
 
 		def comp_sub_placement
 			random_coord = @comp_board.cells.keys.sample(2)
