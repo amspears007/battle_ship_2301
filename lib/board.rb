@@ -27,20 +27,40 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    ship.length == coordinates.length && 
+    ship.length == coordinates.length &&
     coordinates.all? do |coordinate|
       valid_coordinate?(coordinate)
-    end && 
-      consecutive_order?(coordinates) && 
+    end &&
+   if ship.length == 3 
+      consecutive_order_cruiser?(coordinates) && 
       coordinates.all? do |coordinate|
-      @cells[coordinate].empty? == true
+      @cells[coordinate].empty? == true 
+      end
+    else
+        consecutive_order_sub?(coordinates) && 
+        coordinates.all? do |coordinate|
+          # require 'pry'; binding.pry
+        @cells[coordinate].empty? == true
+      end
     end
   end
 
-  def consecutive_order?(coordinates)
+  def consecutive_order_sub?(coordinates)
     coordinates.each_cons(2).all? do |cell_1, cell_2|
       cell_1[0] == cell_2[0] && 
       cell_2[-1].to_i - 1 == cell_1[-1].to_i || cell_1[-1] == cell_2[-1] && 
+      cell_2[0].ord - 1 == cell_1[0].ord
+    end  
+  end
+
+  def consecutive_order_cruiser?(coordinates)
+    coordinates.each_cons(3).all? do |cell_1, cell_2, cell_3|
+      cell_1[0] == cell_2[0] && 
+      cell_2[0] == cell_3[0] &&
+      cell_2[-1].to_i - 1 == cell_1[-1].to_i &&
+      cell_3[-1].to_i - 1 == cell_2[-1].to_i || cell_1[-1] == cell_2[-1] &&
+      cell_2[-1] == cell_3[-1] &&
+      cell_3[0].ord - 1 == cell_2[0].ord &&
       cell_2[0].ord - 1 == cell_1[0].ord
     end  
   end

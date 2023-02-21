@@ -16,10 +16,15 @@ RSpec.describe Game do
 
     it 'allows placement of computer submarine' do
         game = Game.new
-        board = Board.new
-        comp_board = Board.new
-        comp_sub = Ship.new('Submarine', 2)
+    
         game.comp_sub_placement
         expect(game.comp_board.render(true) == game.comp_board.render).to be(false)
-      end
+    end
+
+    it 'allows placement of computer cruiser' do
+        game = Game.new
+    
+        game.comp_cruiser_placement
+        expect(game.comp_board.render(true) == game.comp_board.render).to be(false)
+    end
 end

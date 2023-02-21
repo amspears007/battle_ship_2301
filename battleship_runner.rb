@@ -1,4 +1,4 @@
 require './spec/spec_helper'
-setup = Setup.new
+game = Game.new
 
-setup.main_menu
+game.main_menu

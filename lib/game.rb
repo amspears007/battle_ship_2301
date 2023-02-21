@@ -13,15 +13,19 @@ class Game
 			@user_sub = Ship.new('Submarine', 2)
 			@comp_cruiser = Ship.new('Cruiser', 3)
 			@comp_sub = Ship.new('Submarine', 2)
-			@comp = Computer.new
     end
 
     def main_menu
-      puts "Welcome to BATTLESHIP"
+      puts "Welcome to =*BATTLESHIP*="
+			puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
       puts "Enter P to play. Enter Q to quit."
       user_input = gets.chomp
       if user_input.upcase == "P"
         start_game
+			elsif 
+				user_input.upcase != "P" || user_input.upcase != "Q"
+				puts "Invalid input, try again"
+				main_menu
       else user_input.upcase == "Q"
         quit_game
       end
@@ -33,15 +37,50 @@ class Game
     end
 
 		def start_game
-			@comp.comp_sub_placement(comp_board)
-			@comp.comp_cruiser_placement(comp_board)
-			puts "I have laid out my ships on the grid."
-			puts "You now need to lay out your two ships."
-			user_board.render
-			puts "Enter the squares for the Cruiser (3 spaces):"
+			comp_sub_placement
+			comp_cruiser_placement
+				puts "========================================="
+				puts "I have laid out my ships on the grid."
+				puts "You now need to lay out your two ships."
+				puts "========================================="
+				puts "Here is my board:"
+				print comp_board.render
+				puts "========================================="
+				puts "Place your ships on this board:"
+				puts "========================================="
+				print user_board.render
+
+				puts "Enter the squares for the Cruiser (example: A1 A2 A3):"
 			user_input = gets.chomp.upcase
-			# if user_board
+			# if user_input.upcase == "Q"
+			# quit_game
+			# else
+				until @user_board.valid_placement?(user_cruiser, user_input.split)
+					puts "Invalid input, try again in ascending order"
+					puts "with A1-D4 (example: A1 A2 A3):"
+					user_input = gets.chomp.upcase
+				end
+					@user_board.place(@user_cruiser, user_input.split)
+					print @user_board.render(true)
+					puts "Cruiser succesfully placed!"
+					puts "Now enter the squares for Submarine (example: B1 B2):"
+			user_input = gets.chomp.upcase
+				until @user_board.valid_placement?(user_sub, user_input.split)
+					puts "Invalid input, try again in ascending order"
+					puts "with A1-D4 (example: B1 B2):"
+					user_input = gets.chomp.upcase
+				end
+					@user_board.place(@user_sub, user_input.split)
+					print @user_board.render(true)
+					puts "Congratulations! Let's =*BATTLE(ship)*="
+					turns
+			end
 		end
+
+		def turns
+
+		end
+
 
 		def comp_sub_placement
 			random_coord = @comp_board.cells.keys.sample(2)
@@ -49,5 +88,13 @@ class Game
 				random_coord = @comp_board.cells.keys.sample(2)
 			end
 			@comp_board.place(@comp_sub, random_coord)
+		end
+
+		def comp_cruiser_placement
+			random_coord = @comp_board.cells.keys.sample(3)
+			until @comp_board.valid_placement?(@comp_cruiser, random_coord)
+				random_coord = @comp_board.cells.keys.sample(3)
+			end
+			@comp_board.place(@comp_cruiser, random_coord)
 		end
 end
