@@ -39,37 +39,46 @@ class Game
 		def start_game
 			comp_sub_placement
 			comp_cruiser_placement
-			puts "========================================="
-			puts "I have laid out my ships on the grid."
-			puts "You now need to lay out your two ships."
-			puts "========================================="
-			puts "Here is my board:"
-			print comp_board.render
-			puts "========================================="
-			puts "Place your ships on this board:"
-			puts "========================================="
-			print user_board.render
+				puts "========================================="
+				puts "I have laid out my ships on the grid."
+				puts "You now need to lay out your two ships."
+				puts "========================================="
+				puts "Here is my board:"
+				print comp_board.render
+				puts "========================================="
+				puts "Place your ships on this board:"
+				puts "========================================="
+				print user_board.render
 
-			puts "Enter the squares for the Cruiser (example: A1 A2 A3):"
+				puts "Enter the squares for the Cruiser (example: A1 A2 A3):"
 			user_input = gets.chomp.upcase
-			until @user_board.valid_placement?(user_cruiser, user_input.split)
-				puts "Invalid input, try again in ascending order"
-				puts "with A1-D4 (example: A1 A2 A3):"
-				user_input = gets.chomp.upcase
-			end
-			@user_board.place(@user_cruiser, user_input.split)
-			print @user_board.render(true)
-			puts "Cruiser succesfully placed!"
-			puts "Now enter the squares for Submarine (example: B1 B2):"
+			# if user_input.upcase == "Q"
+			# quit_game
+			# else
+				until @user_board.valid_placement?(user_cruiser, user_input.split)
+					puts "Invalid input, try again in ascending order"
+					puts "with A1-D4 (example: A1 A2 A3):"
+					user_input = gets.chomp.upcase
+				end
+					@user_board.place(@user_cruiser, user_input.split)
+					print @user_board.render(true)
+					puts "Cruiser succesfully placed!"
+					puts "Now enter the squares for Submarine (example: B1 B2):"
 			user_input = gets.chomp.upcase
-			until @user_board.valid_placement?(user_sub, user_input.split)
-				puts "Invalid input, try again in ascending order"
-				puts "with A1-D4 (example: B1 B2):"
-				user_input = gets.chomp.upcase
+				until @user_board.valid_placement?(user_sub, user_input.split)
+					puts "Invalid input, try again in ascending order"
+					puts "with A1-D4 (example: B1 B2):"
+					user_input = gets.chomp.upcase
+				end
+					@user_board.place(@user_sub, user_input.split)
+					print @user_board.render(true)
+					puts "Congratulations! Let's =*BATTLE(ship)*="
+					turns
 			end
-			@user_board.place(@user_sub, user_input.split)
-			print @user_board.render(true)
-			puts "Congratulations! Let's =*BATTLE(ship)*="
+		end
+
+		def turns
+
 		end
 
 
