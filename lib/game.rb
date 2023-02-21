@@ -52,9 +52,7 @@ class Game
 
 				puts "Enter the squares for the Cruiser (example: A1 A2 A3):"
 			user_input = gets.chomp.upcase
-			# if user_input.upcase == "Q"
-			# quit_game
-			# else
+			puts "==============PLAYER BOARD=============="
 				until @user_board.valid_placement?(user_cruiser, user_input.split)
 					puts "Invalid input, try again in ascending order"
 					puts "with A1-D4 (example: A1 A2 A3):"
@@ -70,6 +68,7 @@ class Game
 					puts "with A1-D4 (example: B1 B2):"
 					user_input = gets.chomp.upcase
 				end
+				puts "==============PLAYER BOARD=============="
 					@user_board.place(@user_sub, user_input.split)
 					print @user_board.render(true)
 					puts "Congratulations! Let's =*BATTLE(ship)*="
@@ -81,9 +80,11 @@ class Game
 			print comp_board.render
 			puts "==============PLAYER BOARD=============="
 			print user_board.render(true)
-			puts "Enter the coordinate for your shot:" 
+			puts "Enter the coordinate for your shot:"
 			until user_cruiser.sunk? && user_sub.sunk? || comp_cruiser.sunk? && comp_sub.sunk?
 				user_input = gets.chomp.upcase
+				user_input_string = user_input.to_s
+				puts shot_response_player(user_input_string)
 				until comp_board.valid_coordinate?(user_input)
 					puts "Please enter a valid coordinate" 
 					puts "(example: A1-D4):"
@@ -101,6 +102,15 @@ class Game
 				print user_board.render(true)
 				end
 			end
+
+		def shot_response_player(user_input)
+			# require 'pry'; binding.pry
+			if @comp_board.cells[user_input].render == "H"
+				return "Your shot on #{user_input} was a hit!"
+			end
+			# return "M" if @impact == true && @empty == true
+      #     return "X" if @impact == true && @ship.health == 0
+		end
 
 		def comp_sub_placement
 			random_coord = @comp_board.cells.keys.sample(2)
