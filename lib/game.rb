@@ -22,12 +22,12 @@ class Game
       user_input = gets.chomp
       if user_input.upcase == "P"
         start_game
-			elsif 
-				user_input.upcase != "P" || user_input.upcase != "Q"
-				puts "Invalid input, try again"
-				main_menu
-      else user_input.upcase == "Q"
+			elsif user_input.upcase == "Q"
         quit_game
+      else 
+				user_input.upcase != "P" || user_input.upcase != "Q"
+				puts "Invalid input, try again."
+				main_menu
       end
     end
 
@@ -46,7 +46,7 @@ class Game
 				puts "Here is my board:"
 				print comp_board.render
 				puts "========================================="
-				puts "Place your ships on this board:"
+				puts "Here is your board. Place your ships:"
 				puts "========================================="
 				print user_board.render
 
@@ -74,12 +74,25 @@ class Game
 					print @user_board.render(true)
 					puts "Congratulations! Let's =*BATTLE(ship)*="
 					turns
-			end
 		end
 
 		def turns
-
+			puts "=============COMPUTER BOARD============="
+			print comp_board.render
+			puts "==============PLAYER BOARD=============="
+			print user_board.render(true)
+			puts "Enter the coordinate for your shot:" 
+			user_input = gets.chomp.upcase
+			print comp_board.render(true)
+			if user_input.fired_upon? == false && comp_board.valid_coordinate?(user_input)
+				user_input.fire_upon
+				print comp_board.render
+				print user_board.render(true)
+			end
 		end
+
+
+	
 
 
 		def comp_sub_placement

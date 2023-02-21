@@ -146,11 +146,5 @@ RSpec.describe Board do
     expect(board.render(true)).to eq("  1 2 3 4 \nA H S S . \nB . . . . \nC . . H . \nD . . S . \n")
     cell_5.fire_upon
     expect(board.render(true)).to eq("  1 2 3 4 \nA H S S . \nB . . . . \nC . . X . \nD . . X . \n")
-    
-    
-
-
-
-
   end
 end
