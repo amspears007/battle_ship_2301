@@ -25,7 +25,7 @@ class Cell
   end
 
   def fire_upon
-    return "try again" if @impact == true 
+    return false if @impact == true 
       @impact = true
       if @empty == false
       @ship.hit

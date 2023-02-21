@@ -22,12 +22,12 @@ class Game
       user_input = gets.chomp
       if user_input.upcase == "P"
         start_game
-			elsif 
-				user_input.upcase != "P" || user_input.upcase != "Q"
-				puts "Invalid input, try again"
-				main_menu
-      else user_input.upcase == "Q"
+			elsif user_input.upcase == "Q"
         quit_game
+      else 
+				user_input.upcase != "P" || user_input.upcase != "Q"
+				puts "Invalid input, try again."
+				main_menu
       end
     end
 
@@ -46,7 +46,7 @@ class Game
 				puts "Here is my board:"
 				print comp_board.render
 				puts "========================================="
-				puts "Place your ships on this board:"
+				puts "Here is your board. Place your ships:"
 				puts "========================================="
 				print user_board.render
 
@@ -74,13 +74,33 @@ class Game
 					print @user_board.render(true)
 					puts "Congratulations! Let's =*BATTLE(ship)*="
 					turns
-			end
 		end
 
 		def turns
-
-		end
-
+			puts "=============COMPUTER BOARD============="
+			print comp_board.render
+			puts "==============PLAYER BOARD=============="
+			print user_board.render(true)
+			puts "Enter the coordinate for your shot:" 
+			until user_cruiser.sunk? && user_sub.sunk? || comp_cruiser.sunk? && comp_sub.sunk?
+				user_input = gets.chomp.upcase
+				until comp_board.valid_coordinate?(user_input)
+					puts "Please enter a valid coordinate" 
+					puts "(example: A1-D4):"
+					user_input = gets.chomp.upcase
+				end
+				puts "Enter the coordinate for your shot:" 
+				if comp_board.cells[user_input].fired_upon? == false 
+				comp_board.cells[user_input].fire_upon
+				puts "=============COMPUTER BOARD============="
+				print comp_board.render
+				end
+				random_coord = user_board.cells.keys.sample(1)[0]
+				user_board.cells[random_coord].fire_upon
+				puts "==============PLAYER BOARD=============="
+				print user_board.render(true)
+				end
+			end
 
 		def comp_sub_placement
 			random_coord = @comp_board.cells.keys.sample(2)
