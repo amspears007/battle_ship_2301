@@ -25,7 +25,6 @@ RSpec.describe Game do
         game = Game.new
     
         game.comp_cruiser_placement
-        require 'pry'; binding.pry
         expect(game.comp_board.render(true) == game.comp_board.render).to be(false)
     end
 end

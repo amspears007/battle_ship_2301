@@ -22,6 +22,10 @@ class Game
       user_input = gets.chomp
       if user_input.upcase == "P"
         start_game
+			elsif 
+				user_input.upcase != "P" || user_input.upcase != "Q"
+				puts "Invalid input, try again"
+				main_menu
       else user_input.upcase == "Q"
         quit_game
       end
@@ -46,10 +50,28 @@ class Game
 			puts "========================================="
 			print user_board.render
 
-			puts "Enter the squares for the Cruiser (3 spaces):"
+			puts "Enter the squares for the Cruiser (example: A1 A2 A3):"
 			user_input = gets.chomp.upcase
-			# if user_board
+			until @user_board.valid_placement?(user_cruiser, user_input.split)
+				puts "Invalid input, try again in ascending order"
+				puts "with A1-D4 (example: A1 A2 A3):"
+				user_input = gets.chomp.upcase
+			end
+			@user_board.place(@user_cruiser, user_input.split)
+			print @user_board.render(true)
+			puts "Cruiser succesfully placed!"
+			puts "Now enter the squares for Submarine (example: B1 B2):"
+			user_input = gets.chomp.upcase
+			until @user_board.valid_placement?(user_sub, user_input.split)
+				puts "Invalid input, try again in ascending order"
+				puts "with A1-D4 (example: B1 B2):"
+				user_input = gets.chomp.upcase
+			end
+			@user_board.place(@user_sub, user_input.split)
+			print @user_board.render(true)
+			puts "Congratulations! Let's =*BATTLE(ship)*="
 		end
+
 
 		def comp_sub_placement
 			random_coord = @comp_board.cells.keys.sample(2)
