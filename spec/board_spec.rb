@@ -40,8 +40,17 @@ RSpec.describe Board do
 
   describe 'valid_placement?' do
     it 'validates placements of ships on the board' do
+      expect(board.valid_placement?(submarine, ["A1", "A2"])).to eq(true)
+      expect(board.valid_placement?(cruiser, ["A2", "A3", "A4"])).to eq(true)
+
       expect(board.valid_placement?(cruiser, ["A1", "A2"])).to eq(false)
       expect(board.valid_placement?(submarine, ["A2", "A3", "A4"])).to eq(false)
+    end
+
+    it 'valid_length checks ship length == coordinates' do
+      expect(board.valid_length?(cruiser, ["A2", "A3", "A4"])).to eq(true)
+
+      expect(board.valid_length?(cruiser, ["A2", "A3"])).to eq(false)
     end
   end
 

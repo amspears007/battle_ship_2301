@@ -26,8 +26,12 @@ class Board
     cells.keys.include?(coordinate)
   end
 
+  def valid_length?(ship, coordinates)
+    ship.length == coordinates.length
+  end
+
   def valid_placement?(ship, coordinates)
-    ship.length == coordinates.length &&
+   valid_length?(ship, coordinates) &&
     coordinates.all? do |coordinate|
       valid_coordinate?(coordinate)
     end &&
