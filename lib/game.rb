@@ -97,7 +97,12 @@ class Game
 					puts "(example: A1-D4):"
 					user_input = gets.chomp.upcase
 				end
-				if comp_board.cells[user_input].fired_upon? == false 
+				if comp_board.cells[user_input].fired_upon?
+					puts "=============COMPUTER BOARD============="
+					print comp_board.render
+					puts "You already fired at that coordinate"
+					puts "TURN LOST..."
+				else comp_board.cells[user_input].fired_upon? == false 
 				comp_board.cells[user_input].fire_upon
 				puts "=============COMPUTER BOARD============="
 				print comp_board.render
