@@ -7,15 +7,16 @@ class Game
 								:comp_sub
 
     def initialize
-      @user_board = Board.new
-      @comp_board = Board.new
-			@user_cruiser = Ship.new('Cruiser', 3)
-			@user_sub = Ship.new('Submarine', 2)
-			@comp_cruiser = Ship.new('Cruiser', 3)
-			@comp_sub = Ship.new('Submarine', 2)
+      @user_board = nil
+      @comp_board = nil
+			@user_cruiser = nil
+			@user_sub = nil
+			@comp_cruiser = nil
+			@comp_sub = nil
     end
 
     def main_menu
+			new_game
       puts "Welcome to =*BATTLESHIP*="
 			puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
       puts "Enter P to play. Enter Q to quit."
@@ -30,6 +31,15 @@ class Game
 				main_menu
       end
     end
+
+		def new_game
+			@user_board = Board.new
+      @comp_board = Board.new
+			@user_cruiser = Ship.new('Cruiser', 3)
+			@user_sub = Ship.new('Submarine', 2)
+			@comp_cruiser = Ship.new('Cruiser', 3)
+			@comp_sub = Ship.new('Submarine', 2)
+		end
 
     def quit_game
       puts "You've exited the game."
@@ -49,10 +59,9 @@ class Game
 				puts "Here is your board. Place your ships:"
 				puts "========================================="
 				print user_board.render
-
 				puts "Enter the squares for the Cruiser (example: A1 A2 A3):"
 			user_input = gets.chomp.upcase
-			puts "==============PLAYER BOARD=============="
+				puts "==============PLAYER BOARD=============="
 				until @user_board.valid_placement?(user_cruiser, user_input.split)
 					puts "Invalid input, try again in ascending order"
 					puts "with A1-D4 (example: A1 A2 A3):"
@@ -98,8 +107,11 @@ class Game
 				puts "==============PLAYER BOARD=============="
 				print user_board.render(true)
 				print shot_response_comp(random_coord)
+				puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
 				print shot_response_player(user_input)
+				puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
 			end
+			end_game
 		end
 
 		def shot_response_player(user_input)
@@ -138,6 +150,17 @@ class Game
 			end
 		end
 		
+		def end_game
+			if @comp_cruiser.sunk? && comp_sub.sunk?
+				puts "You Won!"
+				puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
+			else
+				@user_cruiser.sunk? && @user_sub.sunk?
+				puts "You lost..."
+				puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
+			end
+			main_menu
+		end
 
 		def comp_sub_placement
 			random_coord = @comp_board.cells.keys.sample(2)

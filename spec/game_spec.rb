@@ -60,4 +60,15 @@ RSpec.describe Game do
         comp_board.cells["A3"].fire_upon
         # expect(game.shot_response_player(user_input)).to eq("The opponent's ship has sunk!")
     end
+
+    it 'new_game clears all info from previous game' do
+        game = Game.new
+        comp_board = game.comp_board
+        user_cruiser = game.user_cruiser
+        print comp_board.render(true)
+        comp_board.place(user_cruiser, ["A1", "A2", "A3"])
+        # require 'pry'; binding.pry
+        game.new_game
+        print comp_board.render(true)
+    end
 end
