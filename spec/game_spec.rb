@@ -6,9 +6,14 @@ RSpec.describe Game do
     game.new_game
     user_board = Board.new
     comp_board = Board.new
+    user_cruiser = Ship.new('Cruiser', 3)
+    comp_sub = Ship.new('Submarine', 2)
+
     expect(game).to be_instance_of(Game)
     expect(user_board).to be_instance_of(Board)
     expect(comp_board).to be_instance_of(Board)
+    expect(user_cruiser).to be_instance_of(Ship)
+    expect(comp_sub).to be_instance_of(Ship)
   end
 
   it 'allows placement of computer submarine' do
