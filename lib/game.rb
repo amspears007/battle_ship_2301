@@ -107,7 +107,10 @@ class Game
 				puts "=============COMPUTER BOARD============="
 				print comp_board.render
 				end
-				random_coord = user_board.cells.keys.sample(1)[0]
+				random_coord = user_board.cells.keys.sample(1)[0] 
+				until user_board.cells[random_coord].fired_upon?	== false	
+				random_coord = user_board.cells.keys.sample(1)[0] 
+				end
 				user_board.cells[random_coord].fire_upon
 				puts "==============PLAYER BOARD=============="
 				print user_board.render(true)
