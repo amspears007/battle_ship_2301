@@ -15,11 +15,15 @@ class Game
 			@comp_sub = nil
     end
 
+		def display_main_menu
+			"Welcome to =*BATTLESHIP*= \n" +
+			"=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*= \n" +
+      "Enter P to play. Enter Q to quit."
+		end
+
     def main_menu
 			new_game
-      puts "Welcome to =*BATTLESHIP*="
-			puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
-      puts "Enter P to play. Enter Q to quit."
+      put display_main_menu
       user_input = gets.chomp
       if user_input.upcase == "P"
         start_game

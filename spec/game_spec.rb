@@ -1,21 +1,32 @@
 require 'spec_helper'
 
 RSpec.describe Game do
-    it 'initializes' do
-        game = Game.new
-        game.new_game
-        user_board = Board.new
-        comp_board = Board.new
-        expect(game).to be_instance_of(Game)
-        expect(user_board).to be_instance_of(Board)
-        expect(comp_board).to be_instance_of(Board)
-    end
+  it 'initializes' do
+    game = Game.new
+    game.new_game
+    user_board = Board.new
+    comp_board = Board.new
+    expect(game).to be_instance_of(Game)
+    expect(user_board).to be_instance_of(Board)
+    expect(comp_board).to be_instance_of(Board)
+  end
 
-    it 'allows placement of computer submarine' do
-        game = Game.new
-        game.new_game
-        game.comp_sub_placement
-        expect(game.comp_board.render(true) == game.comp_board.render).to be(false)
+  it 'allows placement of computer submarine' do
+    game = Game.new
+    game.new_game
+    game.comp_sub_placement
+    expect(game.comp_board.render(true) == game.comp_board.render).to be(false)
+  end
+
+  it 'displays welcome message at beginning of game' do
+      game = Game.new
+      game.new_game
+
+      expected = "Welcome to =*BATTLESHIP*= \n" +
+			"=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*= \n" +
+      "Enter P to play. Enter Q to quit."
+
+      expect(game.display_main_menu).to eq(expected) 
     end
 
     it 'allows placement of computer cruiser' do
