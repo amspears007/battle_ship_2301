@@ -63,12 +63,19 @@ RSpec.describe Board do
       expect(board.all_valid_coordinates?(["P1", "B2", "H3"])).to eq(false)
     end
 
-    it 'ship_type?_consecutive runs consecutive_order method for subs or cruisers' do
+    it 'ship_type_consecutive? runs consecutive_order method for subs or cruisers' do
       expect(board.ship_type_consecutive?(cruiser, ["A1", "A2", "A3"])).to eq(true)
       expect(board.ship_type_consecutive?(submarine, ["A1", "A2"])).to eq(true)
 
       expect(board.ship_type_consecutive?(cruiser, ["A1", "B2", "C3"])).to eq(false)
       expect(board.ship_type_consecutive?(submarine, ["A1", "B2"])).to eq(false)
+    end
+
+    it 'all_cells_empty? checks all cells in coordinate and ensures they are empyty' do
+      expect(board.all_cells_empty?(["A1", "A2", "A3"])).to eq(true)
+
+      board.place(cruiser, ["A1", "A2", "A3"]) 
+      expect(board.all_cells_empty?(["A1", "A2", "A3"])).to eq(false)
     end
   end
 

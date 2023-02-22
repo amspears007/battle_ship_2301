@@ -44,14 +44,17 @@ class Board
     end
   end
 
+  def all_cells_empty?(coordinates)
+    coordinates.all? do |coordinate|
+      @cells[coordinate].empty? == true
+    end
+  end
+
   def valid_placement?(ship, coordinates)
    valid_length?(ship, coordinates) &&
    all_valid_coordinates?(coordinates) &&
    ship_type_consecutive?(ship, coordinates) && 
-        coordinates.all? do |coordinate|
-          # require 'pry'; binding.pry
-        @cells[coordinate].empty? == true
-    end
+   all_cells_empty?(coordinates)  
   end
 
   def consecutive_order_sub?(coordinates)
