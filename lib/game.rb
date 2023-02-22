@@ -15,11 +15,15 @@ class Game
 			@comp_sub = nil
     end
 
+		def display_main_menu
+			"Welcome to =*BATTLESHIP*= \n" +
+			"=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*= \n" +
+      "Enter P to play. Enter Q to quit."
+		end
+
     def main_menu
 			new_game
-      puts "Welcome to =*BATTLESHIP*="
-			puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
-      puts "Enter P to play. Enter Q to quit."
+      puts display_main_menu
       user_input = gets.chomp
       if user_input.upcase == "P"
         start_game
@@ -46,14 +50,18 @@ class Game
 			exit!
     end
 
+		def display_place_ships_message
+			"========================================= \n" +
+			"I have laid out my ships on the grid. \n" +
+			"You now need to lay out your two ships. \n" +
+			"========================================= \n" +
+			"Here is my board:" 
+		end
+		
 		def start_game
 			comp_sub_placement
 			comp_cruiser_placement
-				puts "========================================="
-				puts "I have laid out my ships on the grid."
-				puts "You now need to lay out your two ships."
-				puts "========================================="
-				puts "Here is my board:"
+				puts display_place_ships_message
 				print comp_board.render
 				puts "========================================="
 				puts "Here is your board. Place your ships:"
@@ -123,7 +131,6 @@ class Game
 		end
 
 		def shot_response_player(user_input)
-			# require 'pry'; binding.pry
 			if @comp_board.cells[user_input].render == "H"
 				puts "Your shot on #{user_input} was a hit!"
 				puts "Enter the coordinate for your shot:"

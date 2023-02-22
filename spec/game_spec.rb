@@ -1,21 +1,50 @@
 require 'spec_helper'
 
 RSpec.describe Game do
-    it 'initializes' do
-        game = Game.new
-        game.new_game
-        user_board = Board.new
-        comp_board = Board.new
-        expect(game).to be_instance_of(Game)
-        expect(user_board).to be_instance_of(Board)
-        expect(comp_board).to be_instance_of(Board)
+  it 'initializes' do
+    game = Game.new
+    game.new_game
+    user_board = Board.new
+    comp_board = Board.new
+    user_cruiser = Ship.new('Cruiser', 3)
+    comp_sub = Ship.new('Submarine', 2)
+
+    expect(game).to be_instance_of(Game)
+    expect(user_board).to be_instance_of(Board)
+    expect(comp_board).to be_instance_of(Board)
+    expect(user_cruiser).to be_instance_of(Ship)
+    expect(comp_sub).to be_instance_of(Ship)
+  end
+
+  it 'allows placement of computer submarine' do
+    game = Game.new
+    game.new_game
+    game.comp_sub_placement
+    expect(game.comp_board.render(true) == game.comp_board.render).to be(false)
+  end
+
+  it 'displays welcome message at beginning of game' do
+      game = Game.new
+      game.new_game
+
+      expected = "Welcome to =*BATTLESHIP*= \n" +
+			"=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*= \n" +
+      "Enter P to play. Enter Q to quit."
+
+      expect(game.display_main_menu).to eq(expected) 
     end
 
-    it 'allows placement of computer submarine' do
-        game = Game.new
-        game.new_game
-        game.comp_sub_placement
-        expect(game.comp_board.render(true) == game.comp_board.render).to be(false)
+    it 'displays message that ships need to be placed' do
+      game = Game.new
+      game.new_game
+
+      expected = "========================================= \n" +
+			"I have laid out my ships on the grid. \n" +
+			"You now need to lay out your two ships. \n" +
+			"========================================= \n" +
+			"Here is my board:" 
+
+      expect(game.display_place_ships_message).to eq(expected)
     end
 
     it 'allows placement of computer cruiser' do
