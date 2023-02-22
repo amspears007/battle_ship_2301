@@ -52,7 +52,7 @@ class Game
 
 				puts "Enter the squares for the Cruiser (example: A1 A2 A3):"
 			user_input = gets.chomp.upcase
-				puts "==============PLAYER BOARD=============="
+			puts "==============PLAYER BOARD=============="
 				until @user_board.valid_placement?(user_cruiser, user_input.split)
 					puts "Invalid input, try again in ascending order"
 					puts "with A1-D4 (example: A1 A2 A3):"
@@ -80,7 +80,7 @@ class Game
 			print comp_board.render
 			puts "==============PLAYER BOARD=============="
 			print user_board.render(true)
-			puts "Enter the coordinate for your shot:" 
+			puts "Enter the coordinate for your shot:"
 			until user_cruiser.sunk? && user_sub.sunk? || comp_cruiser.sunk? && comp_sub.sunk?
 				user_input = gets.chomp.upcase
 				until comp_board.valid_coordinate?(user_input)
@@ -88,7 +88,6 @@ class Game
 					puts "(example: A1-D4):"
 					user_input = gets.chomp.upcase
 				end
-				puts "Enter the coordinate for your shot:" 
 				if comp_board.cells[user_input].fired_upon? == false 
 				comp_board.cells[user_input].fire_upon
 				puts "=============COMPUTER BOARD============="
@@ -99,8 +98,30 @@ class Game
 				puts "==============PLAYER BOARD=============="
 				print user_board.render(true)
 				print shot_response_player(user_input)
+			end
+		end
+
+		def shot_response_player(user_input)
+			# require 'pry'; binding.pry
+			if @comp_board.cells[user_input].render == "H"
+				puts "Your shot on #{user_input} was a hit!"
+				puts "Enter the coordinate for your shot:"
+			elsif
+				@comp_board.cells[user_input].render == "M" 
+				puts "Your shot on #{user_input} was a miss!"
+				puts "Enter the coordinate for your shot:"
+			else
+				@comp_board.cells[user_input].render == "X"
+				puts "The opponent's ship has sunk!"
+				if comp_cruiser.sunk? && comp_sub.sunk?
+					puts "Congratulations!"
+				else comp_cruiser.sunk? || comp_sub.sunk?
+					puts "Enter the coordinate for your shot:"
 				end
 			end
+		end
+		
+		
 
 		def comp_sub_placement
 			random_coord = @comp_board.cells.keys.sample(2)
