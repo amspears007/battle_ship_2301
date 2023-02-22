@@ -7,15 +7,16 @@ class Game
 								:comp_sub
 
     def initialize
-      @user_board = Board.new
-      @comp_board = Board.new
-			@user_cruiser = Ship.new('Cruiser', 3)
-			@user_sub = Ship.new('Submarine', 2)
-			@comp_cruiser = Ship.new('Cruiser', 3)
-			@comp_sub = Ship.new('Submarine', 2)
+      @user_board = nil
+      @comp_board = nil
+			@user_cruiser = nil
+			@user_sub = nil
+			@comp_cruiser = nil
+			@comp_sub = nil
     end
 
     def main_menu
+			new_game
       puts "Welcome to =*BATTLESHIP*="
 			puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
       puts "Enter P to play. Enter Q to quit."
@@ -30,6 +31,15 @@ class Game
 				main_menu
       end
     end
+
+		def new_game
+			@user_board = Board.new
+      @comp_board = Board.new
+			@user_cruiser = Ship.new('Cruiser', 3)
+			@user_sub = Ship.new('Submarine', 2)
+			@comp_cruiser = Ship.new('Cruiser', 3)
+			@comp_sub = Ship.new('Submarine', 2)
+		end
 
     def quit_game
       puts "You've exited the game."
@@ -49,10 +59,9 @@ class Game
 				puts "Here is your board. Place your ships:"
 				puts "========================================="
 				print user_board.render
-
 				puts "Enter the squares for the Cruiser (example: A1 A2 A3):"
 			user_input = gets.chomp.upcase
-			puts "==============PLAYER BOARD=============="
+				puts "==============PLAYER BOARD=============="
 				until @user_board.valid_placement?(user_cruiser, user_input.split)
 					puts "Invalid input, try again in ascending order"
 					puts "with A1-D4 (example: A1 A2 A3):"
@@ -88,7 +97,12 @@ class Game
 					puts "(example: A1-D4):"
 					user_input = gets.chomp.upcase
 				end
-				if comp_board.cells[user_input].fired_upon? == false 
+				if comp_board.cells[user_input].fired_upon?
+					puts "=============COMPUTER BOARD============="
+					print comp_board.render
+					puts "You already fired at that coordinate"
+					puts "TURN LOST..."
+				else comp_board.cells[user_input].fired_upon? == false 
 				comp_board.cells[user_input].fire_upon
 				puts "=============COMPUTER BOARD============="
 				print comp_board.render
@@ -97,8 +111,12 @@ class Game
 				user_board.cells[random_coord].fire_upon
 				puts "==============PLAYER BOARD=============="
 				print user_board.render(true)
+				print shot_response_comp(random_coord)
+				puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
 				print shot_response_player(user_input)
+				puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
 			end
+			end_game
 		end
 
 		def shot_response_player(user_input)
@@ -113,15 +131,41 @@ class Game
 			else
 				@comp_board.cells[user_input].render == "X"
 				puts "The opponent's ship has sunk!"
-				if comp_cruiser.sunk? && comp_sub.sunk?
+				if @comp_cruiser.sunk? && comp_sub.sunk?
 					puts "Congratulations!"
-				else comp_cruiser.sunk? || comp_sub.sunk?
+				else @comp_cruiser.sunk? || comp_sub.sunk?
 					puts "Enter the coordinate for your shot:"
 				end
 			end
 		end
+
+		def shot_response_comp(random_coord)
+			if @user_board.cells[random_coord].render == "H"
+				puts "Opponent's shot on #{random_coord} was a hit!"
+			elsif
+				@user_board.cells[random_coord].render == "M" 
+				puts "Opponent's shot on #{random_coord} was a miss!"
+			else
+				@user_board.cells[random_coord].render == "X"
+				puts "The opponent has sunk your ship!"
+				if @user_cruiser.sunk? && @user_sub.sunk?
+					puts "All your ships have sunk!"
+				else @user_cruiser.sunk? || @user_sub.sunk?
+				end
+			end
+		end
 		
-		
+		def end_game
+			if @comp_cruiser.sunk? && comp_sub.sunk?
+				puts "You Won!"
+				puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
+			else
+				@user_cruiser.sunk? && @user_sub.sunk?
+				puts "You lost..."
+				puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
+			end
+			main_menu
+		end
 
 		def comp_sub_placement
 			random_coord = @comp_board.cells.keys.sample(2)
@@ -137,14 +181,5 @@ class Game
 				random_coord = @comp_board.cells.keys.sample(3)
 			end
 			@comp_board.place(@comp_cruiser, random_coord)
-		end
-
-		def shot_response_player(user_input)
-			# require 'pry'; binding.pry
-			if @comp_board.cells[user_input].render == "H"
-				return "Your shot on #{user_input} was a hit!"
-			end
-			# return "M" if @impact == true && @empty == true
-      #     return "X" if @impact == true && @ship.health == 0
 		end
 end
