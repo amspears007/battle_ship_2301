@@ -97,6 +97,7 @@ class Game
 				user_board.cells[random_coord].fire_upon
 				puts "==============PLAYER BOARD=============="
 				print user_board.render(true)
+				print shot_response_comp(random_coord)
 				print shot_response_player(user_input)
 			end
 		end
@@ -113,14 +114,29 @@ class Game
 			else
 				@comp_board.cells[user_input].render == "X"
 				puts "The opponent's ship has sunk!"
-				if comp_cruiser.sunk? && comp_sub.sunk?
+				if @comp_cruiser.sunk? && comp_sub.sunk?
 					puts "Congratulations!"
-				else comp_cruiser.sunk? || comp_sub.sunk?
+				else @comp_cruiser.sunk? || comp_sub.sunk?
 					puts "Enter the coordinate for your shot:"
 				end
 			end
 		end
-		
+
+		def shot_response_comp(random_coord)
+			if @user_board.cells[random_coord].render == "H"
+				puts "Opponent's shot on #{random_coord} was a hit!"
+			elsif
+				@user_board.cells[random_coord].render == "M" 
+				puts "Opponent's shot on #{random_coord} was a miss!"
+			else
+				@user_board.cells[random_coord].render == "X"
+				puts "The opponent has sunk your ship!"
+				if @user_cruiser.sunk? && @user_sub.sunk?
+					puts "All your ships have sunk!"
+				else @user_cruiser.sunk? || @user_sub.sunk?
+				end
+			end
+		end
 		
 
 		def comp_sub_placement
@@ -137,14 +153,5 @@ class Game
 				random_coord = @comp_board.cells.keys.sample(3)
 			end
 			@comp_board.place(@comp_cruiser, random_coord)
-		end
-
-		def shot_response_player(user_input)
-			# require 'pry'; binding.pry
-			if @comp_board.cells[user_input].render == "H"
-				return "Your shot on #{user_input} was a hit!"
-			end
-			# return "M" if @impact == true && @empty == true
-      #     return "X" if @impact == true && @ship.health == 0
 		end
 end
