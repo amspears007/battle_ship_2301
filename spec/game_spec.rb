@@ -29,6 +29,19 @@ RSpec.describe Game do
       expect(game.display_main_menu).to eq(expected) 
     end
 
+    it 'displays message that ships need to be placed' do
+      game = Game.new
+      game.new_game
+
+      expected = "========================================= \n" +
+			"I have laid out my ships on the grid. \n" +
+			"You now need to lay out your two ships. \n" +
+			"========================================= \n" +
+			"Here is my board:" 
+
+      expect(game.display_place_ships_message).to eq(expected)
+    end
+
     it 'allows placement of computer cruiser' do
         game = Game.new
         game.new_game
