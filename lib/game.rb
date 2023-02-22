@@ -52,9 +52,7 @@ class Game
 
 				puts "Enter the squares for the Cruiser (example: A1 A2 A3):"
 			user_input = gets.chomp.upcase
-			# if user_input.upcase == "Q"
-			# quit_game
-			# else
+				puts "==============PLAYER BOARD=============="
 				until @user_board.valid_placement?(user_cruiser, user_input.split)
 					puts "Invalid input, try again in ascending order"
 					puts "with A1-D4 (example: A1 A2 A3):"
@@ -70,6 +68,7 @@ class Game
 					puts "with A1-D4 (example: B1 B2):"
 					user_input = gets.chomp.upcase
 				end
+				puts "==============PLAYER BOARD=============="
 					@user_board.place(@user_sub, user_input.split)
 					print @user_board.render(true)
 					puts "Congratulations! Let's =*BATTLE(ship)*="
@@ -99,6 +98,7 @@ class Game
 				user_board.cells[random_coord].fire_upon
 				puts "==============PLAYER BOARD=============="
 				print user_board.render(true)
+				print shot_response_player(user_input)
 				end
 			end
 
@@ -116,5 +116,14 @@ class Game
 				random_coord = @comp_board.cells.keys.sample(3)
 			end
 			@comp_board.place(@comp_cruiser, random_coord)
+		end
+
+		def shot_response_player(user_input)
+			# require 'pry'; binding.pry
+			if @comp_board.cells[user_input].render == "H"
+				return "Your shot on #{user_input} was a hit!"
+			end
+			# return "M" if @impact == true && @empty == true
+      #     return "X" if @impact == true && @ship.health == 0
 		end
 end
