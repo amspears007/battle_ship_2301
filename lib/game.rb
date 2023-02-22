@@ -83,14 +83,11 @@ class Game
 			puts "Enter the coordinate for your shot:"
 			until user_cruiser.sunk? && user_sub.sunk? || comp_cruiser.sunk? && comp_sub.sunk?
 				user_input = gets.chomp.upcase
-				user_input_string = user_input.to_s
-				puts shot_response_player(user_input_string)
 				until comp_board.valid_coordinate?(user_input)
 					puts "Please enter a valid coordinate" 
 					puts "(example: A1-D4):"
 					user_input = gets.chomp.upcase
 				end
-				puts "Enter the coordinate for your shot:" 
 				if comp_board.cells[user_input].fired_upon? == false 
 				comp_board.cells[user_input].fire_upon
 				puts "=============COMPUTER BOARD============="
@@ -100,17 +97,31 @@ class Game
 				user_board.cells[random_coord].fire_upon
 				puts "==============PLAYER BOARD=============="
 				print user_board.render(true)
-				end
+				print shot_response_player(user_input)
 			end
+		end
 
 		def shot_response_player(user_input)
 			# require 'pry'; binding.pry
 			if @comp_board.cells[user_input].render == "H"
-				return "Your shot on #{user_input} was a hit!"
+				puts "Your shot on #{user_input} was a hit!"
+				puts "Enter the coordinate for your shot:"
+			elsif
+				@comp_board.cells[user_input].render == "M" 
+				puts "Your shot on #{user_input} was a miss!"
+				puts "Enter the coordinate for your shot:"
+			else
+				@comp_board.cells[user_input].render == "X"
+				puts "The opponent's ship has sunk!"
+				if comp_cruiser.sunk? && comp_sub.sunk?
+					puts "Congratulations!"
+				else comp_cruiser.sunk? || comp_sub.sunk?
+					puts "Enter the coordinate for your shot:"
+				end
 			end
-			# return "M" if @impact == true && @empty == true
-      #     return "X" if @impact == true && @ship.health == 0
 		end
+		
+		
 
 		def comp_sub_placement
 			random_coord = @comp_board.cells.keys.sample(2)
