@@ -34,7 +34,7 @@ RSpec.describe Game do
       expect(game.display_main_menu).to eq(expected) 
     end
 
-    it 'displays message that ships need to be placed' do
+    it 'displays message computer ships have been placed' do
       game = Game.new
       game.new_game
 
@@ -44,7 +44,65 @@ RSpec.describe Game do
 			"========================================= \n" +
 			"Here is my board:" 
 
-      expect(game.display_place_ships_message).to eq(expected)
+      expect(game.display_comp_place_ships).to eq(expected)
+    end
+
+    it 'displays message user needs to place ships' do
+      game = Game.new
+      game.new_game
+
+      expected = "========================================= \n" +
+			"Here is your board. Place your ships: \n" +
+			"=========================================" 
+
+      expect(game.display_user_place_ships).to eq(expected)
+    end
+
+    it 'displays message user needs to place cruiser' do
+      game = Game.new
+      game.new_game
+
+      expected = "Enter the squares for the Cruiser (example: A1 A2 A3):"
+
+      expect(game.display_user_cruiser_placement).to eq(expected)
+    end
+
+    it 'displays message user needs to place submarine after placing cruiser' do
+      game = Game.new
+      game.new_game
+
+      expected = "Cruiser succesfully placed! \n" +
+			"Now enter the squares for Submarine (example: B1 B2):"
+
+      expect(game.display_user_sub_placement).to eq(expected)
+    end
+
+    it "displays message when invalid coordinate is inputted" do
+      game = Game.new
+      game.new_game
+
+      expected = "Invalid input, try again in ascending order \n" +
+			"with A1-D4 (example: A1 A2 A3):"
+
+      expect(game.display_invalid_input).to eq(expected)
+    end
+
+    it 'displays message for the player board' do
+      game = Game.new
+      game.new_game
+
+      expected = "==============PLAYER BOARD=============="
+
+      expected(game.dislay_player_board).to eq(expected)
+    end
+
+    it 'displays message for the player board' do
+      game = Game.new
+      game.new_game
+
+      expected = "=============COMPUTER BOARD============="
+
+      expected(game.dislay_comp_board).to eq(expected)
     end
 
     it 'allows placement of computer cruiser' do
