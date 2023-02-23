@@ -50,42 +50,64 @@ class Game
 			exit!
     end
 
-		def display_place_ships_message
+		def display_comp_place_ships
 			"========================================= \n" +
 			"I have laid out my ships on the grid. \n" +
 			"You now need to lay out your two ships. \n" +
 			"========================================= \n" +
 			"Here is my board:" 
 		end
+
+		def display_user_place_ships
+			"========================================= \n" +
+			"Here is your board. Place your ships: \n" +
+			"========================================="
+		end
+
+		def display_user_cruiser_placement
+			"Enter the squares for the Cruiser (example: A1 A2 A3):"
+		end
+
+		def display_user_sub_placement
+			"Cruiser succesfully placed! \n" +
+			"Now enter the squares for Submarine (example: B1 B2):"
+		end
+
+		def display_invalid_input
+			"Invalid input, try again in ascending order \n" +
+			"with A1-D4 (example: A1 A2 A3):"
+		end
+
+		def display_player_board
+			"==============PLAYER BOARD=============="
+		end
+
+		def display_comp_board
+			"=============COMPUTER BOARD============="
+		end
 		
 		def start_game
 			comp_sub_placement
 			comp_cruiser_placement
-				puts display_place_ships_message
+				puts display_comp_place_ships
 				print comp_board.render
-				puts "========================================="
-				puts "Here is your board. Place your ships:"
-				puts "========================================="
+				puts display_user_place_ships
 				print user_board.render
-				puts "Enter the squares for the Cruiser (example: A1 A2 A3):"
+				puts display_user_cruiser_placement
 			user_input = gets.chomp.upcase
-				puts "==============PLAYER BOARD=============="
 				until @user_board.valid_placement?(user_cruiser, user_input.split)
-					puts "Invalid input, try again in ascending order"
-					puts "with A1-D4 (example: A1 A2 A3):"
+					puts display_invalid_input
 					user_input = gets.chomp.upcase
 				end
 					@user_board.place(@user_cruiser, user_input.split)
 					print @user_board.render(true)
-					puts "Cruiser succesfully placed!"
-					puts "Now enter the squares for Submarine (example: B1 B2):"
+					puts display_user_sub_placement
 			user_input = gets.chomp.upcase
 				until @user_board.valid_placement?(user_sub, user_input.split)
-					puts "Invalid input, try again in ascending order"
-					puts "with A1-D4 (example: B1 B2):"
+					puts display_invalid_input
 					user_input = gets.chomp.upcase
 				end
-				puts "==============PLAYER BOARD=============="
+					puts display_player_board
 					@user_board.place(@user_sub, user_input.split)
 					print @user_board.render(true)
 					puts "Congratulations! Let's =*BATTLE(ship)*="
@@ -93,26 +115,25 @@ class Game
 		end
 
 		def turns
-			puts "=============COMPUTER BOARD============="
+			puts display_comp_board
 			print comp_board.render
-			puts "==============PLAYER BOARD=============="
+			puts display_player_board
 			print user_board.render(true)
 			puts "Enter the coordinate for your shot:"
 			until user_cruiser.sunk? && user_sub.sunk? || comp_cruiser.sunk? && comp_sub.sunk?
 				user_input = gets.chomp.upcase
 				until comp_board.valid_coordinate?(user_input)
-					puts "Please enter a valid coordinate" 
-					puts "(example: A1-D4):"
+					puts display_invalid_input
 					user_input = gets.chomp.upcase
 				end
 				if comp_board.cells[user_input].fired_upon?
-					puts "=============COMPUTER BOARD============="
+					puts display_comp_board
 					print comp_board.render
 					puts "You already fired at that coordinate"
 					puts "TURN LOST..."
 				else comp_board.cells[user_input].fired_upon? == false 
 				comp_board.cells[user_input].fire_upon
-				puts "=============COMPUTER BOARD============="
+				puts display_comp_board
 				print comp_board.render
 				end
 				random_coord = user_board.cells.keys.sample(1)[0] 
@@ -120,7 +141,7 @@ class Game
 				random_coord = user_board.cells.keys.sample(1)[0] 
 				end
 				user_board.cells[random_coord].fire_upon
-				puts "==============PLAYER BOARD=============="
+				puts display_player_board
 				print user_board.render(true)
 				print shot_response_comp(random_coord)
 				puts "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*="
