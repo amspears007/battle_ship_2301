@@ -26,42 +26,88 @@ class Board
     cells.keys.include?(coordinate)
   end
 
-  def valid_placement?(ship, coordinates)
-    ship.length == coordinates.length &&
+  def valid_length?(ship, coordinates)
+    ship.length == coordinates.length
+  end
+
+  def all_valid_coordinates?(coordinates)
     coordinates.all? do |coordinate|
       valid_coordinate?(coordinate)
-    end &&
-   if ship.length == 3 
-      consecutive_order_cruiser?(coordinates) && 
-      coordinates.all? do |coordinate|
-      @cells[coordinate].empty? == true 
-      end
+    end 
+  end
+
+  def ship_type_consecutive?(ship, coordinates)
+    if ship.length == 3 
+      consecutive_order_cruiser?(coordinates)
     else
-        consecutive_order_sub?(coordinates) && 
-        coordinates.all? do |coordinate|
-          # require 'pry'; binding.pry
-        @cells[coordinate].empty? == true
-      end
+      consecutive_order_sub?(coordinates) 
     end
+  end
+
+  def all_cells_empty?(coordinates)
+    coordinates.all? do |coordinate|
+      @cells[coordinate].empty? == true
+    end
+  end
+
+  def valid_placement?(ship, coordinates)
+   valid_length?(ship, coordinates) &&
+   all_valid_coordinates?(coordinates) &&
+   ship_type_consecutive?(ship, coordinates) && 
+   all_cells_empty?(coordinates)  
+  end
+
+  def cells_same_letter(cell_1, cell_2)
+    cell_1[0] == cell_2[0]
+  end
+
+  def cells_next_number(cell_1, cell_2)
+    cell_2[-1].to_i - 1 == cell_1[-1].to_i
+  end
+  
+  def cells_same_number(cell_1, cell_2)
+    cell_1[-1] == cell_2[-1]
+  end
+
+  def cells_next_letter(cell_1, cell_2)
+    cell_2[0].ord - 1 == cell_1[0].ord
+  end
+
+  def next_cells_same_letter(cell_2, cell_3)
+    cell_2[0] == cell_3[0]
+  end
+
+  def next_cells_next_number(cell_2, cell_3)
+    cell_3[-1].to_i - 1 == cell_2[-1].to_i 
+  end
+
+  def next_cells_same_number(cell_2, cell_3)
+    cell_2[-1] == cell_3[-1]
+  end
+
+  def next_cells_next_letter(cell_2, cell_3)
+    cell_3[0].ord - 1 == cell_2[0].ord
   end
 
   def consecutive_order_sub?(coordinates)
     coordinates.each_cons(2).all? do |cell_1, cell_2|
-      cell_1[0] == cell_2[0] && 
-      cell_2[-1].to_i - 1 == cell_1[-1].to_i || cell_1[-1] == cell_2[-1] && 
-      cell_2[0].ord - 1 == cell_1[0].ord
+      cells_same_letter(cell_1, cell_2) && 
+      cells_next_number(cell_1, cell_2) || 
+      cells_same_number(cell_1, cell_2) && 
+      cells_next_letter(cell_1, cell_2)
     end  
   end
 
   def consecutive_order_cruiser?(coordinates)
     coordinates.each_cons(3).all? do |cell_1, cell_2, cell_3|
-      cell_1[0] == cell_2[0] && 
-      cell_2[0] == cell_3[0] &&
-      cell_2[-1].to_i - 1 == cell_1[-1].to_i &&
-      cell_3[-1].to_i - 1 == cell_2[-1].to_i || cell_1[-1] == cell_2[-1] &&
-      cell_2[-1] == cell_3[-1] &&
-      cell_3[0].ord - 1 == cell_2[0].ord &&
-      cell_2[0].ord - 1 == cell_1[0].ord
+      cells_same_letter(cell_1, cell_2) && 
+      next_cells_same_letter(cell_2, cell_3) &&
+      cells_next_number(cell_1, cell_2) &&
+      next_cells_next_number(cell_2, cell_3) || 
+      cells_same_number(cell_1, cell_2) &&
+      next_cells_same_number(cell_2, cell_3) &&
+      next_cells_next_letter(cell_2, cell_3) &&
+      cells_next_letter(cell_1, cell_2)
     end  
   end
 

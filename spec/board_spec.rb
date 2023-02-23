@@ -1,13 +1,21 @@
 require 'spec_helper'
 
 RSpec.describe Board do
+
+  let(:board) {Board.new}
+  let(:cruiser) {Ship.new("Cruiser", 3)}
+  let(:submarine) {Ship.new("Submarine", 2)}
+  let(:cell_1) {board.cells["A1"]}
+  let(:cell_2) {board.cells["A2"]}
+  let(:cell_3) {board.cells["A3"]} 
+  let(:cell_4) {board.cells["C3"]}
+  let(:cell_5) {board.cells["D3"]}
+  
   it 'initializes' do
-    board = Board.new
     expect(board).to be_instance_of(Board)
   end
 
   it 'creates cells in a hash upon initiating' do
-    board = Board.new
     expect(board.cells).to be_instance_of(Hash)
     expect(board.cells.keys.length).to eq(16)
     expect(board.cells.values.length).to eq(16)
@@ -15,76 +23,141 @@ RSpec.describe Board do
   end
 
   it 'validates coordinates on the board' do
-    board = Board.new
     expect(board.valid_coordinate?("A1")).to eq(true)
     expect(board.valid_coordinate?("D4")).to eq(true)
+
+    expect(board.valid_coordinate?("a1")).to eq(false)
+    expect(board.valid_coordinate?("d4")).to eq(false)
+
     expect(board.valid_coordinate?("A5")).to eq(false)
     expect(board.valid_coordinate?("E1")).to eq(false)
     expect(board.valid_coordinate?("A22")).to eq(false)
+    expect(board.valid_coordinate?("Denver, CO")).to eq(false)
+
+    expect(board.valid_coordinate?(["a1"])).to eq(false)
+    expect(board.valid_coordinate?(:A1)).to eq(false)
   end
 
-  it 'validates placements of ships on the board' do
-    board = Board.new
-    cruiser = Ship.new("Cruiser", 3)
-    submarine = Ship.new("Submarine", 2)
+  describe 'valid_placement?' do
+    it 'validates placements of ships on the board' do
+      expect(board.valid_placement?(submarine, ["A1", "A2"])).to eq(true)
+      expect(board.valid_placement?(cruiser, ["A2", "A3", "A4"])).to eq(true)
 
-    expect(board.valid_placement?(cruiser, ["A1", "A2"])).to eq(false)
-    expect(board.valid_placement?(submarine, ["A2", "A3", "A4"])).to eq(false)
+      expect(board.valid_placement?(cruiser, ["A1", "A2"])).to eq(false)
+      expect(board.valid_placement?(submarine, ["A2", "A3", "A4"])).to eq(false)
+    end
+
+    it 'valid_length checks ship length == coordinates' do
+      expect(board.valid_length?(cruiser, ["A2", "A3", "A4"])).to eq(true)
+
+      expect(board.valid_length?(cruiser, ["A2", "A3"])).to eq(false)
+    end
+
+    it 'all_valid_coordinates? checks all coorinates are valid' do
+      expect(board.all_valid_coordinates?(["A1", "A2", "A3"])).to eq(true)
+      expect(board.all_valid_coordinates?(["A3", "A2", "B3"])).to eq(true)
+      expect(board.all_valid_coordinates?(["A1", "B2", "C3"])).to eq(true)
+
+      expect(board.all_valid_coordinates?(["Z3", "A2", "A3"])).to eq(false)
+      expect(board.all_valid_coordinates?(["A3", "BD2", "B3"])).to eq(false)
+      expect(board.all_valid_coordinates?(["P1", "B2", "H3"])).to eq(false)
+    end
+
+    it 'ship_type_consecutive? runs consecutive_order method for subs or cruisers' do
+      expect(board.ship_type_consecutive?(cruiser, ["A1", "A2", "A3"])).to eq(true)
+      expect(board.ship_type_consecutive?(submarine, ["A1", "A2"])).to eq(true)
+
+      expect(board.ship_type_consecutive?(cruiser, ["A1", "B2", "C3"])).to eq(false)
+      expect(board.ship_type_consecutive?(submarine, ["A1", "B2"])).to eq(false)
+    end
+
+    it 'all_cells_empty? checks all cells in coordinate and ensures they are empyty' do
+      expect(board.all_cells_empty?(["A1", "A2", "A3"])).to eq(true)
+
+      board.place(cruiser, ["A1", "A2", "A3"]) 
+      expect(board.all_cells_empty?(["A1", "A2", "A3"])).to eq(false)
+    end
   end
 
-  it 'makes sure coordinates are consecutive on the board' do
-    board = Board.new
-    cruiser = Ship.new("Cruiser", 3)
-    submarine = Ship.new("Submarine", 2)
 
-    expect(board.consecutive_order_cruiser?(["A1", "A2", "A4"])).to eq(false)
-    expect(board.consecutive_order_sub?(["A1", "C1"])).to eq(false)
-    expect(board.consecutive_order_cruiser?(["A3", "A2", "A1"])).to eq(false)
-    expect(board.consecutive_order_sub?(["C1", "B1"])).to eq(false)
+  describe 'consecutive_order?' do
+    it 'makes sure coordinates are consecutive on the board' do
+      expect(board.consecutive_order_cruiser?(["A1", "A2", "A4"])).to eq(false)
+      expect(board.consecutive_order_sub?(["A1", "C1"])).to eq(false)
+      expect(board.consecutive_order_cruiser?(["A3", "A2", "A1"])).to eq(false)
+      expect(board.consecutive_order_sub?(["C1", "B1"])).to eq(false)
 
-    expect(board.consecutive_order_cruiser?(["B2", "B3", "B4"])).to eq(true)
-    expect(board.consecutive_order_sub?(["C1", "C2"])).to eq(true)
-    expect(board.consecutive_order_sub?(["C3", "D3"])).to eq(true)
+      expect(board.consecutive_order_cruiser?(["B2", "B3", "B4"])).to eq(true)
+      expect(board.consecutive_order_sub?(["C1", "C2"])).to eq(true)
+      expect(board.consecutive_order_sub?(["C3", "D3"])).to eq(true)
 
-    expect(board.valid_placement?(cruiser, ["B2", "B3", "B4"])).to eq(true)
-    expect(board.valid_placement?(submarine, ["C1", "C2"])).to eq(true)
-    expect(board.valid_placement?(submarine, ["C3", "D3"])).to eq(true)
-  end
+      expect(board.valid_placement?(cruiser, ["B2", "B3", "B4"])).to eq(true)
+      expect(board.valid_placement?(submarine, ["C1", "C2"])).to eq(true)
+      expect(board.valid_placement?(submarine, ["C3", "D3"])).to eq(true)
+    end
 
-  it 'makes sure coordinates are not diagonal on the board' do
-    board = Board.new
+    it 'makes sure coordinates are not diagonal on the board' do
+      expect(board.consecutive_order_cruiser?(["A1", "B2", "C3"])).to eq(false)
+      expect(board.consecutive_order_sub?(["C2", "D3"])).to eq(false)
+    end
 
-    expect(board.consecutive_order_cruiser?(["A1", "B2", "C3"])).to eq(false)
-    expect(board.consecutive_order_sub?(["C2", "D3"])).to eq(false)
-  end
+    it 'makes sure coordinates are valid on the board' do
+      expect(board.valid_placement?(submarine, ["A1", "A2"])).to eq(true)
+      expect(board.valid_placement?(cruiser, ["B1", "C1", "D1"])).to eq(true)
+      expect(board.valid_placement?(submarine, ["E1", "E2"])).to eq(false)
+      expect(board.valid_placement?(cruiser, ["A2", "A3", "A4"])).to eq(true)
+      expect(board.valid_placement?(submarine, ["$$", "##"])).to eq(false)
+    end
 
-  it 'makes sure coordinates are valid on the board' do
-    board = Board.new
-    cruiser = Ship.new("Cruiser", 3)
-    submarine = Ship.new("Submarine", 2)
+    it 'cells_same_letter' do
+      expect(board.cells_same_letter("A1", "A2")).to eq(true)
+      expect(board.cells_same_letter("A1", "B2")).to eq(false)
+    end
 
-    expect(board.valid_placement?(submarine, ["A1", "A2"])).to eq(true)
-    expect(board.valid_placement?(cruiser, ["B1", "C1", "D1"])).to eq(true)
-    expect(board.valid_placement?(submarine, ["E1", "E2"])).to eq(false)
-    expect(board.valid_placement?(cruiser, ["A2", "A3", "A4"])).to eq(true)
-    expect(board.valid_placement?(submarine, ["$$", "##"])).to eq(false)
+    it 'cells_next_number checks that one cell is increased by 1' do
+      expect(board.cells_next_number("A1", "A2")).to eq(true)
+      expect(board.cells_next_number("A1", "A3")).to eq(false)
+    end
+
+    it 'cells_same_number' do
+      expect(board.cells_same_number("A1", "B1")).to eq(true)
+      expect(board.cells_same_number("A1", "B2")).to eq(false)
+    end
+
+    it 'cells_next_letter checks one cell ordinal value is increased by 1' do
+      expect(board.cells_next_letter("A1", "B1")).to eq(true)
+      expect(board.cells_next_letter("A1", "C1")).to eq(false)
+    end
+
+    it 'next_cells_same_letter' do
+      expect(board.next_cells_same_letter("A1", "A2")).to eq(true)
+      expect(board.next_cells_same_letter("A1", "B2")).to eq(false)
+    end
+
+    it 'next_cells_next_number checks that one cell is increased by 1' do
+      expect(board.next_cells_next_number("A1", "A2")).to eq(true)
+      expect(board.next_cells_next_number("A1", "A3")).to eq(false)
+    end
+
+    it 'next_cells_same_number' do
+      expect(board.next_cells_same_number("A1", "B1")).to eq(true)
+      expect(board.next_cells_same_number("A1", "B2")).to eq(false)
+    end
+
+    it 'next_cells_next_letter checks one cell ordinal value is increased by 1' do
+      expect(board.next_cells_next_letter("A1", "B1")).to eq(true)
+      expect(board.next_cells_next_letter("A1", "C1")).to eq(false)
+    end
   end
 
   it 'places ship on board' do
-    board = Board.new
-    cruiser = Ship.new("Cruiser", 3)
-    submarine = Ship.new("Submarine", 2)
-    cell_1 = board.cells["A1"]  
-    cell_2 = board.cells["A2"]
-    cell_3 = board.cells["A3"] 
-    cell_4 = board.cells["D3"]
-    cell_5 = board.cells["D4"]
-
     expect(cell_1.empty?).to eq(true)
     expect(cell_2.empty?).to eq(true)
     expect(cell_3.empty?).to eq(true)
 
     board.place(cruiser, ["A1", "A2", "A3"]) 
+    expect(board.place(submarine, ["A1", "A2"])).to eq(false)
+
     expect(cell_1.empty?).to eq(false)
     expect(cell_2.empty?).to eq(false)
     expect(cell_3.empty?).to eq(false)
@@ -94,8 +167,8 @@ RSpec.describe Board do
     expect(cell_3.ship).to be_instance_of(Ship)
     expect(cell_2.ship).to eq(cell_3.ship)
 
-    expect(board.place(submarine, ["A1", "A2"])).to eq(false)
-    board.place(submarine, ["D3", "D4"])
+    board.place(submarine, ["C3", "D3"])
+
     expect(cell_4.empty?).to eq(false)
     expect(cell_5.empty?).to eq(false)
 
@@ -104,10 +177,7 @@ RSpec.describe Board do
     expect(cell_4.ship).to eq(cell_5.ship)
   end
 
-  it 'checks for overlapping ships' do
-    board = Board.new
-    cruiser = Ship.new("Cruiser", 3)
-    submarine = Ship.new("Submarine", 2)   
+  it 'checks for overlapping ships' do   
     board.place(cruiser, ["A1", "A2", "A3"])
 
     expect(board.valid_placement?(submarine, ["A1", "B1"])).to eq(false)
@@ -115,27 +185,17 @@ RSpec.describe Board do
   end
 
   it 'can render the board' do
-    board = Board.new
-    cruiser = Ship.new("Cruiser", 3)
-    submarine = Ship.new("Submarine", 2)
-
     board.place(cruiser, ["A1", "A2", "A3"])
+
     expect(board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
     expect(board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n")
+
     board.place(submarine, ["C3", "D3"])
+
     expect(board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . S . \nD . . S . \n")
   end
 
   it 'can render the board with ships fired_upon, hit and sunk' do
-    board = Board.new
-    cruiser = Ship.new("Cruiser", 3)
-    submarine = Ship.new("Submarine", 2)
-    cell_1 = board.cells["A1"]  
-    cell_2 = board.cells["A2"]
-    cell_3 = board.cells["A3"] 
-    cell_4 = board.cells["C3"]
-    cell_5 = board.cells["D3"]
-
     board.place(cruiser, ["A1", "A2", "A3"])
     board.place(submarine, ["C3", "D3"])
 
@@ -144,6 +204,7 @@ RSpec.describe Board do
 
     cell_4.fire_upon
     expect(board.render(true)).to eq("  1 2 3 4 \nA H S S . \nB . . . . \nC . . H . \nD . . S . \n")
+
     cell_5.fire_upon
     expect(board.render(true)).to eq("  1 2 3 4 \nA H S S . \nB . . . . \nC . . X . \nD . . X . \n")
   end
