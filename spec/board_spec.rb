@@ -128,6 +128,26 @@ RSpec.describe Board do
       expect(board.cells_next_letter("A1", "B1")).to eq(true)
       expect(board.cells_next_letter("A1", "C1")).to eq(false)
     end
+
+    it 'next_cells_same_letter' do
+      expect(board.next_cells_same_letter("A1", "A2")).to eq(true)
+      expect(board.next_cells_same_letter("A1", "B2")).to eq(false)
+    end
+
+    it 'next_cells_next_number checks that one cell is increased by 1' do
+      expect(board.next_cells_next_number("A1", "A2")).to eq(true)
+      expect(board.next_cells_next_number("A1", "A3")).to eq(false)
+    end
+
+    it 'next_cells_same_number' do
+      expect(board.next_cells_same_number("A1", "B1")).to eq(true)
+      expect(board.next_cells_same_number("A1", "B2")).to eq(false)
+    end
+
+    it 'next_cells_next_letter checks one cell ordinal value is increased by 1' do
+      expect(board.next_cells_next_letter("A1", "B1")).to eq(true)
+      expect(board.next_cells_next_letter("A1", "C1")).to eq(false)
+    end
   end
 
   it 'places ship on board' do

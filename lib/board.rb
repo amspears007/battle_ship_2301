@@ -73,6 +73,22 @@ class Board
     cell_2[0].ord - 1 == cell_1[0].ord
   end
 
+  def next_cells_same_letter(cell_2, cell_3)
+    cell_2[0] == cell_3[0]
+  end
+
+  def next_cells_next_number(cell_2, cell_3)
+    cell_3[-1].to_i - 1 == cell_2[-1].to_i 
+  end
+
+  def next_cells_same_number(cell_2, cell_3)
+    cell_2[-1] == cell_3[-1]
+  end
+
+  def next_cells_next_letter(cell_2, cell_3)
+    cell_3[0].ord - 1 == cell_2[0].ord
+  end
+
   def consecutive_order_sub?(coordinates)
     coordinates.each_cons(2).all? do |cell_1, cell_2|
       cells_same_letter(cell_1, cell_2) && 
@@ -84,13 +100,14 @@ class Board
 
   def consecutive_order_cruiser?(coordinates)
     coordinates.each_cons(3).all? do |cell_1, cell_2, cell_3|
-      cell_1[0] == cell_2[0] && 
-      cell_2[0] == cell_3[0] &&
-      cell_2[-1].to_i - 1 == cell_1[-1].to_i &&
-      cell_3[-1].to_i - 1 == cell_2[-1].to_i || cell_1[-1] == cell_2[-1] &&
-      cell_2[-1] == cell_3[-1] &&
-      cell_3[0].ord - 1 == cell_2[0].ord &&
-      cell_2[0].ord - 1 == cell_1[0].ord
+      cells_same_letter(cell_1, cell_2) && 
+      next_cells_same_letter(cell_2, cell_3) &&
+      cells_next_number(cell_1, cell_2) &&
+      next_cells_next_number(cell_2, cell_3) || 
+      cells_same_number(cell_1, cell_2) &&
+      next_cells_same_number(cell_2, cell_3) &&
+      next_cells_next_letter(cell_2, cell_3) &&
+      cells_next_letter(cell_1, cell_2)
     end  
   end
 
