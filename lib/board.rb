@@ -57,11 +57,28 @@ class Board
    all_cells_empty?(coordinates)  
   end
 
+  def cells_same_letter(cell_1, cell_2)
+    cell_1[0] == cell_2[0]
+  end
+
+  def cells_next_number(cell_1, cell_2)
+    cell_2[-1].to_i - 1 == cell_1[-1].to_i
+  end
+  
+  def cells_same_number(cell_1, cell_2)
+    cell_1[-1] == cell_2[-1]
+  end
+
+  def cells_next_letter(cell_1, cell_2)
+    cell_2[0].ord - 1 == cell_1[0].ord
+  end
+
   def consecutive_order_sub?(coordinates)
     coordinates.each_cons(2).all? do |cell_1, cell_2|
-      cell_1[0] == cell_2[0] && 
-      cell_2[-1].to_i - 1 == cell_1[-1].to_i || cell_1[-1] == cell_2[-1] && 
-      cell_2[0].ord - 1 == cell_1[0].ord
+      cells_same_letter(cell_1, cell_2) && 
+      cells_next_number(cell_1, cell_2) || 
+      cells_same_number(cell_1, cell_2) && 
+      cells_next_letter(cell_1, cell_2)
     end  
   end
 

@@ -79,33 +79,55 @@ RSpec.describe Board do
     end
   end
 
-  it 'makes sure coordinates are consecutive on the board' do
-    expect(board.consecutive_order_cruiser?(["A1", "A2", "A4"])).to eq(false)
-    expect(board.consecutive_order_sub?(["A1", "C1"])).to eq(false)
-    expect(board.consecutive_order_cruiser?(["A3", "A2", "A1"])).to eq(false)
-    expect(board.consecutive_order_sub?(["C1", "B1"])).to eq(false)
 
-    expect(board.consecutive_order_cruiser?(["B2", "B3", "B4"])).to eq(true)
-    expect(board.consecutive_order_sub?(["C1", "C2"])).to eq(true)
-    expect(board.consecutive_order_sub?(["C3", "D3"])).to eq(true)
+  describe 'consecutive_order?' do
+    it 'makes sure coordinates are consecutive on the board' do
+      expect(board.consecutive_order_cruiser?(["A1", "A2", "A4"])).to eq(false)
+      expect(board.consecutive_order_sub?(["A1", "C1"])).to eq(false)
+      expect(board.consecutive_order_cruiser?(["A3", "A2", "A1"])).to eq(false)
+      expect(board.consecutive_order_sub?(["C1", "B1"])).to eq(false)
 
-    expect(board.valid_placement?(cruiser, ["B2", "B3", "B4"])).to eq(true)
-    expect(board.valid_placement?(submarine, ["C1", "C2"])).to eq(true)
-    expect(board.valid_placement?(submarine, ["C3", "D3"])).to eq(true)
-  end
+      expect(board.consecutive_order_cruiser?(["B2", "B3", "B4"])).to eq(true)
+      expect(board.consecutive_order_sub?(["C1", "C2"])).to eq(true)
+      expect(board.consecutive_order_sub?(["C3", "D3"])).to eq(true)
 
-  it 'makes sure coordinates are not diagonal on the board' do
+      expect(board.valid_placement?(cruiser, ["B2", "B3", "B4"])).to eq(true)
+      expect(board.valid_placement?(submarine, ["C1", "C2"])).to eq(true)
+      expect(board.valid_placement?(submarine, ["C3", "D3"])).to eq(true)
+    end
 
-    expect(board.consecutive_order_cruiser?(["A1", "B2", "C3"])).to eq(false)
-    expect(board.consecutive_order_sub?(["C2", "D3"])).to eq(false)
-  end
+    it 'makes sure coordinates are not diagonal on the board' do
+      expect(board.consecutive_order_cruiser?(["A1", "B2", "C3"])).to eq(false)
+      expect(board.consecutive_order_sub?(["C2", "D3"])).to eq(false)
+    end
 
-  it 'makes sure coordinates are valid on the board' do
-    expect(board.valid_placement?(submarine, ["A1", "A2"])).to eq(true)
-    expect(board.valid_placement?(cruiser, ["B1", "C1", "D1"])).to eq(true)
-    expect(board.valid_placement?(submarine, ["E1", "E2"])).to eq(false)
-    expect(board.valid_placement?(cruiser, ["A2", "A3", "A4"])).to eq(true)
-    expect(board.valid_placement?(submarine, ["$$", "##"])).to eq(false)
+    it 'makes sure coordinates are valid on the board' do
+      expect(board.valid_placement?(submarine, ["A1", "A2"])).to eq(true)
+      expect(board.valid_placement?(cruiser, ["B1", "C1", "D1"])).to eq(true)
+      expect(board.valid_placement?(submarine, ["E1", "E2"])).to eq(false)
+      expect(board.valid_placement?(cruiser, ["A2", "A3", "A4"])).to eq(true)
+      expect(board.valid_placement?(submarine, ["$$", "##"])).to eq(false)
+    end
+
+    it 'cells_same_letter' do
+      expect(board.cells_same_letter("A1", "A2")).to eq(true)
+      expect(board.cells_same_letter("A1", "B2")).to eq(false)
+    end
+
+    it 'cells_next_number checks that one cell is increased by 1' do
+      expect(board.cells_next_number("A1", "A2")).to eq(true)
+      expect(board.cells_next_number("A1", "A3")).to eq(false)
+    end
+
+    it 'cells_same_number' do
+      expect(board.cells_same_number("A1", "B1")).to eq(true)
+      expect(board.cells_same_number("A1", "B2")).to eq(false)
+    end
+
+    it 'cells_next_letter checks one cell ordinal value is increased by 1' do
+      expect(board.cells_next_letter("A1", "B1")).to eq(true)
+      expect(board.cells_next_letter("A1", "C1")).to eq(false)
+    end
   end
 
   it 'places ship on board' do
